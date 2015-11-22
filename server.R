@@ -11,9 +11,9 @@ library(shiny)
 library(data.table)
 library(ggplot2)
 require(googleVis)
+library(lubridate)
 
-dat <- data.frame(
-  Interruption = c("Interruption"),
+raw_data <- data.frame(
   ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",
          "ID10", "ID11", "ID12",
          "ID13", "ID14", "ID15"),
@@ -57,28 +57,43 @@ dat <- data.frame(
   )
 )
 
+Interruption <- "Interruption"
+raw_data <- cbind( Interruption, raw_data)
+
+issues <- data.table(raw_data)
+
 shinyServer(function(input, output) {
   
+  grouped_issues <- reactive({
+    switch(input$number_of_issue_grouping,
+           All = issues[, .(DATE = start)],
+           Yearly = issues[, .(DATE = floor_date(start, "year"))],
+           Monthly = issues[, .(DATE = floor_date(start, "month"))],
+           Daily = issues[, .(DATE = floor_date(start, "day"))])
+  })
+  
+  
   output$number_of_issue <- renderPlot({
-    barplot(table(dat$start))
+    ggplot(grouped_issues(), aes(x = factor(DATE))) + 
+      geom_bar(colour="black", fill="#DD8888", width=.8, stat = "bin") +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+      ylab("Number of issues") +
+      xlab("Date/Time of issue")
   })
 
   output$plot <- renderGvis({
     gvisTimeline(
-      data = dat,
+      rowlabel = "Interruption",
+      data = raw_data,
       barlabel = "ID",
       start = "start", end = "end"
     )
   })
   
-  output$summary <- renderDataTable({
-    mtcars
-  }, options = list(orderClasses = TRUE))
-  
   output$table <- renderDataTable({
-    dat
+    raw_data
   }, options = list(
-    lengthMenu = c(5, 30, 50), pageLength = 15, orderClasses = TRUE
+    lengthMenu = c(15, 30, 50), pageLength = 15, orderClasses = TRUE
   ))
   
 })
