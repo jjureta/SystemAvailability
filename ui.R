@@ -19,6 +19,10 @@ summaryLayout <- fluidRow(column(
 
 dataLayout <- fluidRow(column(
   12,
+  fileInput('uploadData', 'Upload CSV File',
+            accept=c('text/csv', 
+                     'text/comma-separated-values,text/plain', 
+                     '.csv')),
   downloadButton('downloadData', 'Download'),
   br(),
   br(),

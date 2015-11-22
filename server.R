@@ -13,17 +13,31 @@ library(lubridate)
 source("./source/defaultdata.R")
 source("./source/tools.R")
 
-raw_data <- get_default_data()
-
 Interruption <- "Interruption"
-raw_data_inter <- cbind( Interruption, raw_data)
-
-issues <- data.table(raw_data_inter)
 
 shinyServer(function(input, output) {
   
+  dataInput <- reactive({
+    inFile <- input$uploadData
+    if (is.null(inFile))
+      raw_data <- get_default_data()
+    else
+      raw_data <- read.csv(inFile$datapath)
+    
+    raw_data[, c("start")] <- as.POSIXct(raw_data[,c("start")])
+    raw_data[, c("end")] <- as.POSIXct(raw_data[,c("end")])
+    
+    raw_data
+  })
+  
+  output$table <- renderDataTable({
+    dataInput()
+  }, options = list(
+    lengthMenu = c(15, 30, 50), pageLength = 15, orderClasses = TRUE
+  ))
+  
   grouped_issues <- reactive({
-    group_issues(input$number_of_issue_grouping, issues)
+    group_issues(input$number_of_issue_grouping, data.table(dataInput()))
   })
   
   output$number_of_issue <- renderPlot({
@@ -31,6 +45,8 @@ shinyServer(function(input, output) {
   })
 
   output$plot <- renderGvis({
+    raw_data_inter <- cbind(Interruption, dataInput())
+    
     gvisTimeline(
       rowlabel = "Interruption",
       data = raw_data_inter,
@@ -38,12 +54,6 @@ shinyServer(function(input, output) {
       start = "start", end = "end"
     )
   })
-  
-  output$table <- renderDataTable({
-    raw_data
-  }, options = list(
-    lengthMenu = c(15, 30, 50), pageLength = 15, orderClasses = TRUE
-  ))
   
   # downloadHandler() takes two arguments, both functions.
   # The content function is passed a filename as an argument, and
@@ -60,7 +70,7 @@ shinyServer(function(input, output) {
     # the argument 'file'.
     content = function(file) {
       # Write to a file specified by the 'file' argument
-      write.table(raw_data, file, sep = ",",
+      write.csv(dataInput(), file, sep = ",",
                   row.names = TRUE)
     }
   )

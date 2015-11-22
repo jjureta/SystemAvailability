@@ -4,7 +4,7 @@ get_default_data <- function() {
     ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",
            "ID10", "ID11", "ID12",
            "ID13", "ID14", "ID15"),
-    start = as.POSIXct(
+    start = 
       c(
         "2014-03-14 14:00",
         "2014-03-14 15:00",
@@ -22,8 +22,8 @@ get_default_data <- function() {
         "2014-03-18 15:00",
         "2014-03-18 14:30"
       )
-    ),
-    end = as.POSIXct(
+    ,
+    end = 
       c(
         "2014-03-14 15:00",
         "2014-03-14 16:00",
@@ -41,6 +41,5 @@ get_default_data <- function() {
         "2014-03-18 16:00",
         "2014-03-18 15:30"
       )
-    )
   )
 }
