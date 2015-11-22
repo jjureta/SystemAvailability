@@ -1,3 +1,4 @@
+## Get an example of issue data set
 get_default_data <- function() {
   data.frame(
     ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",

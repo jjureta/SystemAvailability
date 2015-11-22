@@ -3,6 +3,7 @@ library(ggplot2)
 require(googleVis)
 library(lubridate)
 
+## Get an example of the issue data set
 raw_data <- data.frame(
   #Interruption = c("Interruption"),
   ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",
