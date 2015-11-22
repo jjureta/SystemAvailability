@@ -16,7 +16,7 @@ summaryLayout <- fluidRow(column(
   plotOutput("number_of_issue")
 ))
 
-shinyUI(fluidPage(#http://rpubs.com/jjureta/sysavail
+shinyUI(fluidPage(
   shinyUI(
     navbarPage(
       "System Availability",
@@ -24,6 +24,6 @@ shinyUI(fluidPage(#http://rpubs.com/jjureta/sysavail
       tabPanel("Summary", summaryLayout),
       tabPanel(
         "Table", dataTableOutput('table')),
-      tabPanel("Help", a("google",href = "http://www.google.com"))
+      tabPanel("Help", a("System Availability Application", href = "http://rpubs.com/jjureta/sysavail"))
     )
   )))
