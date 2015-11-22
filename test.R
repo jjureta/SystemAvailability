@@ -1,9 +1,13 @@
-data(Stock)
-Stock
+library(data.table)
+library(ggplot2)
+require(googleVis)
+library(lubridate)
 
-dat <- data.frame(
-  Interruption = c("Interruption"),
-  ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6"),
+raw_data <- data.frame(
+  #Interruption = c("Interruption"),
+  ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",
+         "ID10", "ID11", "ID12",
+         "ID13", "ID14", "ID15"),
   start = as.POSIXct(
     c(
       "2014-03-14 14:00",
@@ -14,7 +18,13 @@ dat <- data.frame(
       "2014-03-15 14:30",
       "2014-03-16 14:00",
       "2014-03-16 15:00",
-      "2014-03-16 14:30"
+      "2014-03-16 14:30",
+      "2014-03-17 14:00",
+      "2014-03-17 15:00",
+      "2014-03-17 14:30",
+      "2014-03-18 14:00",
+      "2014-03-18 15:00",
+      "2014-03-18 14:30"
     )
   ),
   end = as.POSIXct(
@@ -27,16 +37,23 @@ dat <- data.frame(
       "2014-03-15 15:30",
       "2014-03-16 15:00",
       "2014-03-16 16:00",
-      "2014-03-16 15:30"
+      "2014-03-16 15:30",
+      "2014-03-17 15:00",
+      "2014-03-17 16:00",
+      "2014-03-17 15:30",
+      "2014-03-18 15:00",
+      "2014-03-18 16:00",
+      "2014-03-18 15:30"
     )
   )
 )
 
-A1 <- gvisAnnotatedTimeLine(Stock, datevar="Date",
-                            numvar="Value", idvar="Device",
-                            titlevar="Title", annotationvar="Annotation",
-                            options=list(displayAnnotations=TRUE,
-                                         legendPosition='newRow',
-                                         width="600px", height="350px")
-)
-plot(A1)
+Interruption <- "Interruption"
+raw_data <- cbind( Interruption, raw_data)
+
+issues <- data.table(raw_data)
+issues[, DATE := floor_date(start, "day")]
+
+p <- ggplot(issues, aes(x = factor(DATE))) + 
+  geom_bar(stat = "bin")
+plot(p)

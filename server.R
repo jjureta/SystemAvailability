@@ -11,9 +11,10 @@ library(shiny)
 library(data.table)
 library(ggplot2)
 require(googleVis)
+library(lubridate)
 
-dat <- data.frame(
-  Interruption = c("Interruption"),
+raw_data <- data.frame(
+  #Interruption = c("Interruption"),
   ID = c("ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9",
          "ID10", "ID11", "ID12",
          "ID13", "ID14", "ID15"),
@@ -57,26 +58,29 @@ dat <- data.frame(
   )
 )
 
+Interruption <- "Interruption"
+raw_data <- cbind( Interruption, raw_data)
+
+issues <- data.table(raw_data)
+issues[, DATE := floor_date(start, "day")]
+
 shinyServer(function(input, output) {
   
   output$number_of_issue <- renderPlot({
-    barplot(table(dat$start))
+    ggplot(issues, aes(x = factor(DATE))) + geom_bar(stat = "bin")
   })
 
   output$plot <- renderGvis({
     gvisTimeline(
-      data = dat,
+      rowlabel = "Interruption",
+      data = raw_data,
       barlabel = "ID",
       start = "start", end = "end"
     )
   })
   
-  output$summary <- renderDataTable({
-    mtcars
-  }, options = list(orderClasses = TRUE))
-  
   output$table <- renderDataTable({
-    dat
+    raw_data
   }, options = list(
     lengthMenu = c(5, 30, 50), pageLength = 15, orderClasses = TRUE
   ))
