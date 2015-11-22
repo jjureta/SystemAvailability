@@ -23,7 +23,7 @@ shinyUI(fluidPage(
       tabPanel("Plot", htmlOutput('plot')),
       tabPanel("Summary", summaryLayout),
       tabPanel(
-        "Table", dataTableOutput('table')),
-      tabPanel("Help", a("System Availability Application", href = "http://rpubs.com/jjureta/sysavail"))
+        "Data", dataTableOutput('table')),
+      tabPanel("Help", includeMarkdown("help/SystemAvailabilityPresentation.md"))
     )
   )))

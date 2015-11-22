@@ -3,26 +3,43 @@ System Availability Application
 author: Josip Jureta
 date: 2015-11-21 
 
-First Slide
+Inroduction
 ========================================================
 
-For more details on authoring R presentations click the
-**Help** button on the toolbar.
+The System Availability Application is made to help in analysing and understanding of the system issues which influence the system availability.
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+The application can be found [here](https://jjureta.shinyapps.io/SystemAvailability )
 
-Slide With Code
+Plot
 ========================================================
 
-```{r}
-summary(cars)
-```
+The issues from the data set are displayed using the Google Timeline Gadget. The goal of this view is to give an idea of the issue distribution over the time.
 
-Slide With Plot
+Moving the mous over each issue, the information like its ID, start and end time and its duration are displayed.
+
+Summary
 ========================================================
+
+* Data grouping could be done by
+  + All: all issues in the data set
+  + Yearly: issues are grouped by year
+  + Monthly: issues are grouped by month
+  + Daily: issues are grouped  by day
+  
+* Number of issues
+The number of issues is displayed in the bar chart and represents the number of issue by period defined in the grouping choice.
+
+Summary Example
+========================================================
+
+Number of issues per day:
 
 ```{r, echo=FALSE}
-plot(cars)
+library(data.table)
+library(ggplot2)
+
+source("../source/defaultdata.R")
+source("./source/tools.R")
+
+
 ```
