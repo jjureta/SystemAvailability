@@ -1,5 +1,6 @@
 library(data.table)
 library(ggplot2)
+library(lubridate)
 
 group_issues <- function(grouping_type, issues) {
   switch(grouping_type,

@@ -27,7 +27,7 @@ Summary
   + Daily: issues are grouped  by day
   
 * Number of issues
-The number of issues is displayed in the bar chart and represents the number of issue by period defined in the grouping choice.
+The number of issues is displayed in the bar chart and it represents the number of issue by period defined in the grouping choice.
 
 Summary Example
 ========================================================
@@ -39,7 +39,9 @@ library(data.table)
 library(ggplot2)
 
 source("../source/defaultdata.R")
-source("./source/tools.R")
+source("../source/tools.R")
 
-
+raw_data <- get_default_data()
+issues <- group_issues("Daily", data.table(raw_data))
+display_number_of_issues(issues)
 ```
