@@ -17,6 +17,14 @@ summaryLayout <- fluidRow(column(
   plotOutput("number_of_issue")
 ))
 
+dataLayout <- fluidRow(column(
+  12,
+  downloadButton('downloadData', 'Download'),
+  br(),
+  br(),
+  dataTableOutput('table')
+))
+
 shinyUI(fluidPage(
   shinyUI(
     navbarPage(
@@ -24,7 +32,7 @@ shinyUI(fluidPage(
       tabPanel("Plot", htmlOutput('plot')),
       tabPanel("Summary", summaryLayout),
       tabPanel(
-        "Data", dataTableOutput('table')),
+        "Data", dataLayout),
       tabPanel("Help", includeMarkdown("./help/SystemAvailabilityPresentation.md"))
     )
   )))
