@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(data.table)
 library(ggplot2)
 require(googleVis)
 
@@ -57,7 +58,11 @@ dat <- data.frame(
 )
 
 shinyServer(function(input, output) {
-  # a large table, reative to input$show_vars
+  
+  output$number_of_issue <- renderPlot({
+    barplot(table(dat$start))
+  })
+
   output$plot <- renderGvis({
     gvisTimeline(
       data = dat,
@@ -66,7 +71,6 @@ shinyServer(function(input, output) {
     )
   })
   
-  # sorted columns are colored now because CSS are attached to them
   output$summary <- renderDataTable({
     mtcars
   }, options = list(orderClasses = TRUE))

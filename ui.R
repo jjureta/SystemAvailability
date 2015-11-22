@@ -7,14 +7,20 @@
 
 library(shiny)
 
-shinyUI(fluidPage(
+summaryLayout <- fluidRow(
+  column(4,
+         selectInput('number_of_issue_grouping', 'Number of issues:',
+                     c("All", "Yearly", "Monthly", "Daily")),
+         br(),
+         plotOutput("number_of_issue")
+  )
+)
 
-  # Application title
-  titlePanel("System Availability Analysis"),
+shinyUI(fluidPage(
   
   shinyUI(navbarPage("System Availability",
                      tabPanel("Plot", htmlOutput('plot')),
-                     tabPanel("Summary", dataTableOutput('summary')),
+                     tabPanel("Summary", summaryLayout),
                      tabPanel("Table", dataTableOutput('table'))
   ))
 ))
