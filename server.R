@@ -27,7 +27,7 @@ shinyServer(function(input, output) {
     raw_data[, c("start")] <- as.POSIXct(raw_data[,c("start")])
     raw_data[, c("end")] <- as.POSIXct(raw_data[,c("end")])
     
-    raw_data
+    data.table(raw_data)
   })
   
   output$table <- renderDataTable({
@@ -37,21 +37,45 @@ shinyServer(function(input, output) {
   ))
   
   grouped_issues <- reactive({
-    group_issues(input$number_of_issue_grouping, data.table(dataInput()))
+    group_issues(input$number_of_issue_grouping, dataInput())
   })
   
   output$number_of_issue <- renderPlot({
     display_number_of_issues(grouped_issues())
   })
-
-  output$plot <- renderGvis({
+  
+  output$plotIssues <- renderGvis({
     raw_data_inter <- cbind(Interruption, dataInput())
     
     gvisTimeline(
       rowlabel = "Interruption",
       data = raw_data_inter,
-      barlabel = "ID",
+      #barlabel = "ID",
       start = "start", end = "end"
+    )
+  })
+
+  output$plotAggregatedIssues <- renderGvis({
+    ans <- dataInput()
+    setkey(ans, start, end)
+    
+    ans = foverlaps(ans, ans, type="any")
+    ans = ans[, `:=`(start = pmin(start, i.start), end = pmax(end, i.end))]
+    ans = ans[, `:=`(i.start=NULL, i.end=NULL)][start <= end]
+    ans = ans[ID != i.ID]
+    ans = ans[start != end]
+    
+    ans = ans[, .(start = min(start), end = max(end)) , by = .(ID)]
+    ans = unique(ans, by = c("start", "end"))
+    ans = ans[,ID := NULL]
+    
+    raw_data_inter <- cbind(Interruption, ans)
+    
+    gvisTimeline(
+      rowlabel = "Interruption",
+      data = raw_data_inter,
+      start = "start", 
+      end = "end"
     )
   })
   

@@ -7,6 +7,13 @@
 library(shiny)
 library(markdown)
 
+plotLayout <- fluidRow(column(
+  12,
+  htmlOutput('plotIssues'),
+  br(),
+  htmlOutput('plotAggregatedIssues'))
+)
+
 summaryLayout <- fluidRow(column(
   4,
   selectInput(
@@ -33,7 +40,7 @@ shinyUI(fluidPage(
   shinyUI(
     navbarPage(
       "System Availability",
-      tabPanel("Plot", htmlOutput('plot')),
+      tabPanel("Plot", plotLayout),
       tabPanel("Summary", summaryLayout),
       tabPanel(
         "Data", dataLayout),

@@ -55,3 +55,20 @@ raw_data <- cbind( Interruption, raw_data)
 issues <- data.table(raw_data)
 
 setkey(issues, start, end)
+
+ans = foverlaps(issues, issues, type="any")
+ans = ans[, `:=`(start = pmin(start, i.start), end = pmax(end, i.end))]
+ans = ans[, `:=`(i.start=NULL, i.end=NULL)][start <= end]
+ans = ans[ID != i.ID]
+ans = ans[start != end]
+
+ans = ans[, .(start = min(start), end = max(end)) , by = .(ID)]
+ans = unique(ans, by = c("start", "end"))
+ans = ans[,ID := NULL]
+
+#b = merge(ans, issues, by.x="i.ID", by.y="ID")
+
+#b[start.y < start.x, ID := i.ID]
+
+#ans[, ID = i.ID)]
+
