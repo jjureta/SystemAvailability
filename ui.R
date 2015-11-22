@@ -5,6 +5,7 @@
 #
 
 library(shiny)
+library(markdown)
 
 summaryLayout <- fluidRow(column(
   4,
@@ -24,6 +25,6 @@ shinyUI(fluidPage(
       tabPanel("Summary", summaryLayout),
       tabPanel(
         "Data", dataTableOutput('table')),
-      tabPanel("Help", includeMarkdown("help/SystemAvailabilityPresentation.md"))
+      tabPanel("Help", includeMarkdown("./help/SystemAvailabilityPresentation.md"))
     )
   )))
