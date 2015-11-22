@@ -52,8 +52,5 @@ Interruption <- "Interruption"
 raw_data <- cbind( Interruption, raw_data)
 
 issues <- data.table(raw_data)
-issues[, DATE := floor_date(start, "day")]
 
-p <- ggplot(issues, aes(x = factor(DATE))) + 
-  geom_bar(stat = "bin")
-plot(p)
+setkey(issues, start, end)
