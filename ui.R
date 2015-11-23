@@ -9,8 +9,9 @@ library(markdown)
 
 plotLayout <- fluidRow(column(
   12,
+  h3("Individual issues:"),
   htmlOutput('plotIssues'),
-  br(),
+  h3("Aggregated interval of issues:"),
   htmlOutput('plotAggregatedIssues'))
 )
 

@@ -50,7 +50,6 @@ shinyServer(function(input, output) {
     gvisTimeline(
       rowlabel = "Interruption",
       data = raw_data_inter,
-      #barlabel = "ID",
       start = "start", end = "end"
     )
   })
